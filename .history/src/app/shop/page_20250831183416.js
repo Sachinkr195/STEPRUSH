@@ -65,7 +65,7 @@ const ShopPage = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {trendingShoes.map((shoe) => (
-            <Link key={shoe.id} href={`/shop/product/${shoe.id}`}>
+            <Link key={shoe.id} href={`//product/${shoe.id}`}>
               <div className="bg-[#0d0d0d] p-4 rounded-xl flex flex-col cursor-pointer">
                 <img
                   src={shoe.img}

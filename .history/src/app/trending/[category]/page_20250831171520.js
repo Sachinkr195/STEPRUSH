@@ -2,7 +2,6 @@
 import ProductCard from "@/components/Productcard";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 
 const Page = () => {
   const params = useParams();

@@ -26,7 +26,7 @@ const Navbar1 = ({profile}) => {
       {/* Icons */}
       <div className="flex items-center gap-6 text-2xl">
         <FaShoppingCart className="hover:text-red-500 cursor-pointer" />
-        <Link href= {profile? '/profile':'/User/Login'} >
+        <Link href= {profile?('/profile')} >
                 {profile ?(
           <div className="flex items-center gap-2">
             <img

@@ -19,7 +19,25 @@ const ShopPage = () => {
 
       if (!res.ok) {
         console.error("Error fetching profile");
+      }
 
+      const data = await res.json();
+      setProfile(data.user);
+      setShoesList(data.shoes);
+      console.log("Profile fetched successfully:", data.user, data.shoes);
+
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+  const fetchshoes = async () => {
+    try {
+      const res = await fetch('/api/shop', {
+        method: 'GET',
+      });
+
+      if (!res.ok) {
+        console.error("Error fetching profile");
       }
 
       const data = await res.json();
@@ -65,7 +83,7 @@ const ShopPage = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {trendingShoes.map((shoe) => (
-            <Link key={shoe.id} href={`/shop/product/${shoe.id}`}>
+            <Link key={shoe.id} href={`/product/${shoe.id}`}>
               <div className="bg-[#0d0d0d] p-4 rounded-xl flex flex-col cursor-pointer">
                 <img
                   src={shoe.img}
@@ -88,7 +106,7 @@ const ShopPage = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {sellingShoes.map((shoe) => (
-            <Link key={shoe.id} href={`/shop/product/${shoe.id}`}>
+            <Link key={shoe.id} href={`/product/${shoe.id}`}>
               <div className="bg-[#0d0d0d] p-4 rounded-xl flex flex-col cursor-pointer">
                 <img
                   src={shoe.img}

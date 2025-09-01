@@ -1,46 +1,18 @@
-'use client';
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+"use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]); // ✅ holds list of items
-  const [total, setTotal] = useState(0);
-  const [status, setStatus] = useState('');
-  const [payment, setPayment] = useState('');
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token'); // ✅ fixed
-        const res = await fetch('/api/order', {
-          method: 'GET',
-          headers: {
-            authorization: token ? `Bearer ${token}` : '',
-          },
-        });
-
-        if (!res.ok) {
-          console.error('Failed to fetch orders');
-          return;
-        }
-
-        const data = await res.json(); // ✅ fixed
-        setCartItems(data.items || []);
-        setTotal(data.totalamount || 0);
-        setStatus(data.status || '');
-        setPayment(data.paymentstatus || '');
-      } catch (error) {
-        console.error('Error fetching cart:', error);
-      }
-    };
-
-    fetchData(); // ✅ call the function
+    // Example: Fetch from localStorage or API
+    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCartItems(savedCart);
   }, []);
 
   const getTotal = () => {
-    return cartItems
-      .filter((item) => !item.paid)
-      .reduce((acc, item) => acc + item.price * item.quantity, 0);
+    return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
   return (
@@ -94,9 +66,7 @@ const CartPage = () => {
           {/* Checkout Section */}
           {cartItems.some((item) => !item.paid) && (
             <div className="mt-6 text-right border-t pt-4">
-              <p className="text-xl font-semibold mb-2">
-                Total: ₹{getTotal()}
-              </p>
+              <p className="text-xl font-semibold mb-2">Total: ₹{getTotal()}</p>
               <Link
                 href="/checkout"
                 className="inline-block px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition"
