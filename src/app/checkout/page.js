@@ -1,12 +1,20 @@
-
 'use client';
-export const dynamic = 'force-dynamic';
+
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/navigation';
 
-const CheckoutPage = () => {
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div className="text-white">Loading checkout...</div>}>
+      <CheckoutContent />
+    </Suspense>
+  );
+}
+
+function CheckoutContent() {
   const params = useSearchParams();
   const router = useRouter();
 
@@ -17,11 +25,10 @@ const CheckoutPage = () => {
   const color = params.get('color');
   const total = price * quantity;
   const Id = params.get('id');
-  const img = params.get('img')
-  
+  const img = params.get('img');
 
-  const [username, setUsername] = useState("");
-  const [userid, setUserid] = useState("");
+  const [username, setUsername] = useState('');
+  const [userid, setUserid] = useState('');
   const [item, setItem] = useState({
     shoeId: Id,
     variantColor: color,
@@ -29,26 +36,25 @@ const CheckoutPage = () => {
     price: price,
     quantity: quantity,
     img: img,
-    Name: productname
-    
+    Name: productname,
   });
 
   const [address, setAddress] = useState({
-    street: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    country: ""
+    street: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: '',
   });
 
   useEffect(() => {
     const fetchAddress = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) return;
 
       const res = await fetch(`/api/profile`, {
-        method: "GET",
-        headers: { authorization: `Bearer ${token}` }
+        method: 'GET',
+        headers: { authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
@@ -65,35 +71,34 @@ const CheckoutPage = () => {
     const { name, value } = e.target;
     setAddress((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handlePlaceOrder = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      alert("Please login first");
+      alert('Please login first');
       return;
     }
 
     const orderData = { userid, username, item, address, total };
 
     const res = await fetch(`/api/order`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(orderData)
+      body: JSON.stringify(orderData),
     });
-    
 
     const data = await res.json();
     if (res.ok) {
-      alert("Order placed successfully!");
-      router.push('/shop')
+      alert('Order placed successfully!');
+      router.push('/shop');
     } else {
-      alert("Failed to place order: " + data.error);
+      alert('Failed to place order: ' + data.error);
     }
   };
 
@@ -137,6 +142,4 @@ const CheckoutPage = () => {
       </div>
     </div>
   );
-};
-
-export default CheckoutPage;
+}
